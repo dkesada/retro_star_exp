@@ -51,6 +51,8 @@ parser.add_argument('--use_value_fn', action='store_true')
 parser.add_argument('--value_model', default='best_epoch_final_4.pt')
 parser.add_argument('--result_folder', default='results')
 
+parser.add_argument("-f", "--fff", help="a dummy argument to fool ipython", default="1")
+
 args = parser.parse_args()
 
 # setup device
