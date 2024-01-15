@@ -9,6 +9,9 @@ from retro_star.utils import setup_logger
 import os
 dirpath = os.path.dirname(os.path.abspath(__file__))
 
+logger = logging.getLogger('retro_star')
+
+
 class RSPlanner:
     def __init__(self,
                  gpu=-1,
@@ -22,9 +25,10 @@ class RSPlanner:
                  value_model='best_epoch_final_4.pt',
                  fp_dim=2048,
                  viz=False,
-                 viz_dir='viz'):
+                 viz_dir='viz',
+				 silent=True):
 
-        #setup_logger()
+        setup_logger(silent=silent)
         device = torch.device('cuda:%d' % gpu if gpu >= 0 else 'cpu')
         starting_mols = prepare_starting_molecules(starting_molecules)
 
@@ -39,7 +43,7 @@ class RSPlanner:
                 device=device
             ).to(device)
             model_f = '%s/%s' % (save_folder, value_model)
-            #logging.info('Loading value nn from %s' % model_f)
+            logger.info('Loading value nn from %s' % model_f)
             model.load_state_dict(torch.load(model_f, map_location=device))
             model.eval()
 
@@ -77,8 +81,8 @@ class RSPlanner:
             return result
 
         else:
-            #logging.info('Synthesis path for %s not found. Please try increasing '
-            #             'the number of iterations.' % target_mol)
+            logger.info('Synthesis path for %s not found. Please try increasing '
+                         'the number of iterations.' % target_mol)
             return None
 
 

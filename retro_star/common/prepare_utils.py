@@ -3,9 +3,11 @@ import pandas as pd
 import logging
 from mlp_retrosyn.mlp_inference import MLPModel
 from retro_star.alg import molstar
+logger = logging.getLogger('retro_star')
+
 
 def prepare_starting_molecules(filename):
-    logging.info('Loading starting molecules from %s' % filename)
+    logger.info('Loading starting molecules from %s' % filename)
 
     if filename[-3:] == 'csv':
         starting_mols = set(list(pd.read_csv(filename)['mol']))
@@ -14,12 +16,12 @@ def prepare_starting_molecules(filename):
         with open(filename, 'rb') as f:
             starting_mols = pickle.load(f)
 
-    logging.info('%d starting molecules loaded' % len(starting_mols))
+    logger.info('%d starting molecules loaded' % len(starting_mols))
     return starting_mols
 
 def prepare_mlp(templates, model_dump):
-    logging.info('Templates: %s' % templates)
-    logging.info('Loading trained mlp model from %s' % model_dump)
+    logger.info('Templates: %s' % templates)
+    logger.info('Loading trained mlp model from %s' % model_dump)
     one_step = MLPModel(model_dump, templates, device=-1)
     return one_step
 

@@ -4,6 +4,7 @@ import torch
 import pickle
 import logging
 from torch.utils.data import Dataset, DataLoader
+logger = logging.getLogger('retro_star')
 
 
 def unpack_fps(packed_fps):
@@ -18,7 +19,7 @@ def unpack_fps(packed_fps):
 class ValueDataset(Dataset):
     def __init__(self, fp_value_f):
         assert os.path.exists('%s.pt' % fp_value_f)
-        logging.info('Loading value dataset from %s.pt'% fp_value_f)
+        logger.info('Loading value dataset from %s.pt'% fp_value_f)
         data_dict = torch.load('%s.pt' % fp_value_f)
         self.fps = unpack_fps(data_dict['fps'])
         self.values = data_dict['values']
@@ -36,12 +37,12 @@ class ValueDataset(Dataset):
         self.reshuffle()
 
         assert self.fps.shape[0] == self.values.shape[0]
-        logging.info('%d (fp, value) pairs loaded' % self.fps.shape[0])
-        logging.info('%d nagative samples loaded' % self.reactant_fps.shape[0])
+        logger.info('%d (fp, value) pairs loaded' % self.fps.shape[0])
+        logger.info('%d nagative samples loaded' % self.reactant_fps.shape[0])
         print(self.fps.shape, self.values.shape,
               self.reactant_fps.shape, self.reactant_masks.shape)
 
-        logging.info(
+        logger.info(
             'mean: %f, std:%f, min: %f, max: %f, zeros: %f' %
             (self.values.mean(), self.values.std(), self.values.min(),
              self.values.max(), (self.values==0).sum()*1. / self.fps.shape[0])

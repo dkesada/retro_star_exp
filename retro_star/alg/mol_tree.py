@@ -6,6 +6,7 @@ from graphviz import Digraph
 from retro_star.alg.mol_node import MolNode
 from retro_star.alg.reaction_node import ReactionNode
 from retro_star.alg.syn_route import SynRoute
+logger = logging.getLogger('retro_star')
 
 
 class MolTree:
@@ -22,7 +23,7 @@ class MolTree:
         self.search_status = 0
 
         if self.succ:
-            logging.info('Synthesis route found: target in starting molecules')
+            logger.info('Synthesis route found: target in starting molecules')
 
     def _add_mol_node(self, mol, parent):
         is_known = mol in self.known_mols
@@ -83,7 +84,7 @@ class MolTree:
             mol_node.parent.backup(v_delta, from_mol=mol_node.mol)
 
         if not self.succ and self.root.succ:
-            logging.info('Synthesis route found!')
+            logger.info('Synthesis route found!')
             self.succ = True
 
         return self.succ

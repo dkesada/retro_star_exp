@@ -5,6 +5,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from tqdm import tqdm
 import logging
+logger = logging.getLogger('retro_star')
 
 
 class Trainer:
@@ -91,7 +92,7 @@ class Trainer:
 
             train_loss = self._train_epoch()
             val_loss = self._val_epoch()
-            logging.info(
+            logger.info(
                 '[Epoch %d/%d] [training loss: %f] [validation loss: %f]' %
                 (epoch, self.n_epochs, train_loss, val_loss)
             )

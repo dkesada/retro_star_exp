@@ -2,6 +2,7 @@ import os
 import numpy as np
 import logging
 from retro_star.alg.mol_tree import MolTree
+logger = logging.getLogger('retro_star')
 
 
 def molstar(target_mol, target_mol_id, starting_mols, expand_fn, value_fn,
@@ -25,7 +26,7 @@ def molstar(target_mol, target_mol_id, starting_mols, expand_fn, value_fn,
             scores = np.array(scores)
 
             if np.min(scores) == np.inf:
-                logging.info('No open nodes!')
+                logger.info('No open nodes!')
                 break
 
             metric = scores
@@ -63,9 +64,9 @@ def molstar(target_mol, target_mol_id, starting_mols, expand_fn, value_fn,
 
             else:
                 mol_tree.expand(m_next, None, None, None)
-                logging.info('Expansion fails on %s!' % m_next.mol)
+                logger.info('Expansion fails on %s!' % m_next.mol)
 
-        logging.info('Final search status | success value | iter: %s | %s | %d'
+        logger.info('Final search status | success value | iter: %s | %s | %d'
                      % (str(mol_tree.search_status), str(mol_tree.root.succ_value), i+1))
 
     best_route = None

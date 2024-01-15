@@ -9,6 +9,7 @@ from retro_star.common import args, prepare_starting_molecules, prepare_mlp, \
     prepare_molstar_planner, smiles_to_fp
 from retro_star.model import ValueMLP
 from retro_star.utils import setup_logger
+logger = logging.getLogger('retro_star')
 
 
 def retro_plan():
@@ -17,7 +18,7 @@ def retro_plan():
     starting_mols = prepare_starting_molecules(args.starting_molecules)
 
     routes = pickle.load(open(args.test_routes, 'rb'))
-    logging.info('%d routes extracted from %s loaded' % (len(routes),
+    logger.info('%d routes extracted from %s loaded' % (len(routes),
                                                          args.test_routes))
 
     one_step = prepare_mlp(args.mlp_templates, args.mlp_model_dump)
@@ -35,7 +36,7 @@ def retro_plan():
             device=device
         ).to(device)
         model_f = '%s/%s' % (args.save_folder, args.value_model)
-        logging.info('Loading value nn from %s' % model_f)
+        logger.info('Loading value nn from %s' % model_f)
         model.load_state_dict(torch.load(model_f,  map_location=device))
         model.eval()
 
@@ -87,7 +88,7 @@ def retro_plan():
         tot_succ = np.array(result['succ']).sum()
         avg_time = (time.time() - t0) * 1.0 / tot_num
         avg_iter = np.array(result['iter'], dtype=float).mean()
-        logging.info('Succ: %d/%d/%d | avg time: %.2f s | avg iter: %.2f' %
+        logger.info('Succ: %d/%d/%d | avg time: %.2f s | avg iter: %.2f' %
                      (tot_succ, tot_num, num_targets, avg_time, avg_iter))
 
     f = open(args.result_folder + '/plan.pkl', 'wb')
